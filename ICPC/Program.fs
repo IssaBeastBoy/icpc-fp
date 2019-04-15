@@ -114,43 +114,56 @@ let checkForWordMatching input listOfWord =
             | false -> addTheComma b (a::updatedList) foundWord
     addTheComma listOfWord [] 0
 
-// Check if the character after the , is a space
-// Check if the character after the ' ' is a letter
-// if both are met return true
-// otherwise return false
+// look for the given char and return true or false
 let checkForCharAfter input (charToLookUp:char) = 
-    let listOfChars = ['a'..'z']
     let index = input.ToString().IndexOf(charToLookUp)
     match index with
     | (-1) -> false
     | _ -> 
-        let rec isItCorrect theSentence accAns =
-            let input2 = theSentence.ToString().Substring(index+1)
-            let input3 = 
-                match (index-1) < 0 with
-                | true -> ""
-                | false -> theSentence.ToString().Substring(index-1)
+        
+        let lastindex = input.ToString().Length-1
+        match input.ToString().Chars(lastindex) with 
+        | '.' ->
+            let rec isItCorrect theSentence accAns =
+                let index2 = theSentence.ToString().IndexOf(charToLookUp)
+                let input2 = 
+                    match (index2+1) >= (String.length theSentence) with
+                    | true -> ""
+                    | false -> theSentence.ToString().Substring(index2+1)
 
-            match input3.ToString() with
-            | "" -> false
-            | _ -> 
-                match input3.ToString().Chars(0) with
-                | ' '| '.'| ',' -> false
+                let input3 = 
+                    match (index2-1) < 0 with
+                    | true -> ""
+                    | false -> theSentence.ToString().Substring(index2-1)
+
+                match input3.ToString() with
+                | "" -> accAns
                 | _ -> 
-                    match index=((String.length input)-1) with
-                    | true -> accAns 
-                    | false -> 
-                        match input2.ToString().Chars(0) with
-                        | ' ' -> 
-                            match input2.ToString().Chars(1) with
-                            | ' '| '.'| ',' -> accAns
+                    match input3.ToString().Chars(0) with
+                    | ' ' -> false
+                    | _ -> 
+                        match index2=((String.length input)-1) with
+                        | true -> 
+                            let finalList = (input.ToString().Split(' ')) |> Array.toList
+                            match (finalList.Length=1) with
+                            | true -> true
+                            | false -> false
+                        | false -> 
+                            match input2.ToString() with
+                            | "" -> true
                             | _ -> 
-                                match input2.ToString().Chars(2) with
-                                | ' '| '.'| ',' -> accAns
-                                | _ -> isItCorrect input2 true
-                        | _ -> false
-            
-        isItCorrect input false
+                                match input2.ToString().Chars(0) with
+                                | ' ' -> 
+                                    match input2.ToString().Chars(1) with
+                                    | ' '| '.'| ',' -> false
+                                    | _ -> 
+                                        match input2.ToString().Chars(2) with
+                                        | ' '| '.'| ',' -> false
+                                        | _ -> isItCorrect input2 true
+                                | _ -> false
+                
+            isItCorrect input false
+        | _ -> false
 
 let Thulani input =
     let startOFList = input.ToString().Split(' ')
@@ -206,9 +219,24 @@ let commaSprinkler input =
                     | false -> None
                     | _ -> Thulani input
         | _ -> 
-            match (checkForCharAfter input ',') && (checkForCharAfter input '.') with
-            | true -> (Thulani input)
-            | false -> None
+            let finalList = (input.ToString().Split(' ')) |> Array.toList
+            match (finalList.Length=1) with
+            | true -> 
+                match (checkForCharAfter input '.') with 
+                | false -> None
+                | true -> 
+                    let charList = ['a'..'z']
+                    let charbefore = input.ToString().Chars(input.ToString().Length-2)
+                    let tOrF = List.contains charbefore charList
+                    match tOrF with
+                    | true -> Thulani input
+                    | false -> None
+
+            | false -> 
+                match (checkForCharAfter input ',') && (checkForCharAfter input '.'), (checkForCharAfter input '.') with
+                | true,true -> Thulani input
+                | false,false | false , true -> None
+
 
 let getLength xs=
    let rec lenght list size =
