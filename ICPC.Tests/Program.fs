@@ -5,3 +5,4 @@ module Program =
     do ()
 
     let [<EntryPoint>] main _ = 0
+
