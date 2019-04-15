@@ -77,6 +77,7 @@ let stringEditor list words=
     edit list "" words
 
 let commaSprinkler input =
+
     let startOFList = input.ToString().Split(' ')
     let finalList = startOFList |> Array.toList
     match finalList.Length with
@@ -116,6 +117,7 @@ let getLength xs=
    lenght xs 0
 
 let rivers input =
+
     let stringInputArray = input.ToString().Split(' ')
     let listString = stringInputArray|> Array.toList 
     match listString.Length=2 with
