@@ -20,7 +20,7 @@ let rivers input =
             match input.ToString().Contains(","), input.ToString().Contains("!") with
             |true,_ -> None
             |_true -> None
-            |_ -> Some 1
+            |_ -> Some 2
             
 [<EntryPoint>]
 let main argv =
