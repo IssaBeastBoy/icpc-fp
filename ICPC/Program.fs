@@ -217,6 +217,7 @@ let rivers input =
         finisher 1 1 startingLength 0 0
 
 
+
 [<EntryPoint>]
 let main argv =
     printfn "Hello World from F#!"
