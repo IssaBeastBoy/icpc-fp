@@ -374,4 +374,5 @@ let rivers input =
 [<EntryPoint>]
 let main argv =
     printfn "Hello World from F#!"
+    printfn "We are done!!!!!"
     0 // return an integer exit code
